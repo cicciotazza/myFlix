@@ -1,0 +1,29 @@
+{
+  "name": "movie_api",
+  "version": "1.0.0",
+  "description": "To build the server-side component of a “movies” web application. The web\r application will provide users with access to information about different\r movies, directors, and genres. Users will be able to sign up, update their\r personal information, and create a list of their favorite movies",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cicciotazza/movie_api.git"
+  },
+  "keywords": [],
+  "author": "cicciotazza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cicciotazza/movie_api/issues"
+  },
+  "homepage": "https://github.com/cicciotazza/movie_api#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "eslint": "^8.4.1"
+  }
+}
