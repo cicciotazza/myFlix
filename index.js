@@ -71,7 +71,7 @@ app.get('/', (req, res) =>{
   
 //Get doc req, res with express.static
 app.get('/documentation', (req, res) => {
-    res.sendFile ('public/documentation.html', {root: __dirname });
+    res.sendFile ('/public/documentation.html', {root: __dirname });
 });
   
 //Get movies req, res json bobject
