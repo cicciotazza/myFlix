@@ -36,3 +36,5 @@ personal information, and create a list of their favorite movies
 **Task04**
 *Route HTTP requests for your project using Express*
 
+**Task05**
+*Define the endpoints for your REST API*

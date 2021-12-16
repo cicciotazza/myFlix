@@ -7,39 +7,145 @@
     <body>
         <h1>Documentation</h1>
         <h2>Context</h2>
-        <h4>It’s no longer enough for a JavaScript developer to be skilled in frontend development alone. It’s
-            become essential that you be able to interface with (as you did in Achievement 1) and even create
-            your own APIs. For this reason, throughout this Achievement, you’ll create a REST API for an
-            application called “myFlix” that interacts with a database that stores data about different movies.
+        <p> Create a REST API for an application called “myFlix” that interacts with a database that stores data about different movies.
             In the next Achievement, you’ll build the client-side component of this same application using REACT.
             By the end of Achievement 3, you’ll have a complete web application (client-side and server-side) built
             using full-stack JavaScript technologies that you can showcase in your portfolio. The project will
             demonstrate your mastery of full-stack JavaScript development, including APIs, web server
             frameworks, databases, business logic, authentication, data security, and more. The complete tech
             stack you’ll master is known as the MERN (MongoDB, Express, React, and Node.js) stack.
-            Note that it’s not a requirement that you name your application “myFlix.” You’re also free to decide
-            which movies you wish to include in your project. For example, you may want to build a movie
-            application specifically for period or superhero movies, or a more diverse application with a wider user
-            base. It’s up to you!</h4>
-        <p>Let's get it done</p>
+        </p>
+        <br>
+
+        <h2>API requirements</h2>
+        <ul>
+            <li>Be a Node.js and Express application;</li>
+            <li>Use REST architecture, with URL endpoints corresponding to the data operations listed above;</li>
+            <li>Use at least three middleware modules, such as the body-parser package for reading data from requests and morgan for logging;</li>
+            <li>Use a “package.json” file;</li>
+            <li>Be built using MongoDB;</li>
+            <li>Must be modeled with Mongoose;</li>
+            <li>Provide movie information in JSON format;</li>
+            <li>Be tested in Postman;</li>
+            <li>Include user authentication and authorization code;</li>
+            <li>Include data validation logic;</li>
+            <li>Meet data security regulations;</li>
+            <li>The source code must be deployed to a publicly accessible platform like GitHub;</li>
+            <li>Must be deployed to Heroku.</li>
+            <li>The JavaScript code must be error-free;</li>
+        </ul>
+     
+        <h2>Essential features</h2>
+            <table>
+                <tr>
+                    <th>Request</th>
+                    <th>URL</th>
+                    <th>HTTP Method</th>
+                    <th>Response</th>
+                </tr>
+                <tr>
+                    <td>Home</td>
+                    <td>/</td>
+                    <td>GET</td>
+                    <td>Hello, welcome to myFlix App</td>
+                </tr>
+                <tr>
+                    <td>Get a list of ALL movies</td>
+                    <td>/Movies</td>
+                    <td>GET</td>
+                    <td>Returns an array of all JSON objects in the database.</td>
+                </tr>
+                <tr>
+                    <td>Get data about ONE movie by title</td>
+                    <td>/movies/:title</td>
+                    <td>GET</td>
+                    <td>Returns a JSON object with movies of that title.</td>
+                </tr>
+                <tr>
+                    <td>Get data about a genre by name.</td>
+                    <td>/genres/:genre</td>
+                    <td>GET</td>
+                    <td>Returns a JSON data with movies of that genre.</td>
+                </tr>
+                <tr>
+                    <td>Get data about genre</td>
+                    <td>/genres/:title</td>
+                    <td>GET</td>
+                    <td>Returns JSON object with data by name/title.</td>
+                </tr>
+                <tr>
+                    <td>Get data about director</td>
+                    <td>/directors/:directorName</td>
+                    <td>GET</td>
+                    <td>Returns a JSON data.</td>
+                </tr>                                   
+                <tr>
+                    <td>Get ALL users</td>
+                    <td>/users</td>
+                    <td>GET</td>
+                    <td>Returns a JSON data with all users.</td>
+                </tr>
+                <tr>
+                    <td>Add NEW user</td>
+                    <td>/users/:newUser</td>
+                    <td>POST</td>
+                    <td>Adds new user to JSON object.</td>
+                </tr>
+                <tr>
+                    <td>Allow users to update their user information</td>
+                    <td>/users/:Username</td>
+                    <td>PUT</td>
+                    <td>Updates JSON object.</td>
+                </tr>
+                <tr>
+                    <td>Delete the user</td>
+                    <td>/users/:deleteUser</td>
+                    <td>DELETE</td>
+                    <td>Confirms that the user was deleted.</td>
+                </tr>
+                <tr>
+                    <td>Add new movie to favorites</td>
+                    <td>/favorite/:movieName</td>
+                    <td>POST</td>
+                    <td>Confirms that the movie was added successfully.</td>
+                </tr>
+                <tr>
+                    <td>Delete movie from favorites</td>
+                    <td>/favorite/:deleteMovie</td>
+                    <td>DELETE</td>
+                    <td>Confirms which movie was removed successfully.</td>
+                </tr>
+            </table>
+            <br>
+            <br>
 
         <h2>Exercise 1: Intro to Server-Side Programming</h2>
-            <h4><li>Set up your project directory</li></h4>
+            <li>Set up your project directory</li>
         <h2>Exercise 2: Node.js Modules</h2>
-            <h4><li>Practice writing Node.js syntax</li></h4>
-
+            <li>Practice writing Node.js syntax</li>
         <h2>Exercise 3: Packages & Package Managers</h2>
-            <h4>
                 <ul> 
                     <li>Create a “package.json” file</li>
                     <li>Import all necessary packages into project directory</li>
                     <li>Define your project dependencies</li>
-                </ul>
-            </h4>
-               
+                </ul>               
         <h2>Exercise 4: Web Server Frameworks & Express</h2>
-            <h4><li>Route HTTP requests for your project using Express</li></h4>
-
+            <li>Route HTTP requests for your project using Express</li>
+        <h2>Exercise 5: REST & API Endpoints</h2>
+            <li>Define the endpoints for your REST API</li>
+        <h2>Exercise 6: Relational Databases & SQL</h2>
+            <li>Create a relational (SQL) database for storing movie data using PostgreSQL</li>
+        <h2>Exercise 7: Non-Relational Databases & MongoDB</h2>
+            <li>Recreate your relational (SQL) database as a non-relational (NoSQL) database using MongoDB</li>    
+        <h2>Exercise 8: The Business Logic Layer</h2>
+            <li>Model your business logic using Mongoose</li>
+        <h2>Exercise 9: Authentication & Authorization</h2>
+            <li>Implement authentication and authorization into your API using basic HTTP authentication and JWT (token-based) authentication</li>
+        <h2>Exercise 10: Data Security, Validation, & Ethics</h2>
+            <li>Incorporate data validation logic into your API</li>
+            <li>Implement data security and storage controls</li>
+            <li>Host your project on the web using HerokuPage</li>
+            
     </body>
 
 </html>
