@@ -87,7 +87,7 @@ app.get('/movies', (req, res) => {
 });
 
 app.get('/movies/:title', (req, res) => {
-    let movie = movie.find((movie) => {
+    let movie = myMovies.find((movie) => {
         return movie.title === req.params.title;
     });
     if(movie) {
@@ -102,15 +102,6 @@ app.get('/movies/:id?', (req, res) => {
       { return movie.name === req.params.name }));
   });
   
-/* ---not working either---
-app.get('/movies/:id', function(req, res) {
-    responsemyMovies = req.params.id== undefined ?
-    myMovies.filter( function(obj) {return obj.it== req.params.id} )
-    : myMovies;
-    res.json(responsemyMovies) 
-  }); 
-
-   */
 
 app.get('/movies/genres/:title', (req, res) => {
     res.send('Genre by name/title');
