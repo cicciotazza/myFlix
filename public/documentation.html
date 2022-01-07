@@ -53,67 +53,70 @@
                     <td>Get a list of ALL movies</td>
                     <td>/Movies</td>
                     <td>GET</td>
-                    <td>Returns an array of all JSON objects in the database.</td>
+                    <td>Returns an array of all JSON objects from mongoDB.</td>
+                </tr>
+                <tr>
+                    <td>Get ALL users</td>
+                    <td>/users</td>
+                    <td>GET</td>
+                    <td>Returns JSON data with all users from mongoDB.</td>
                 </tr>
                 <tr>
                     <td>Get data about ONE movie by title</td>
                     <td>/movies/:title</td>
                     <td>GET</td>
-                    <td>Returns a JSON object with movies of that title.</td>
+                    <td>Returns a JSON object with that title or error.</td>
+                </tr>
+                 <tr>
+                    <td>Get data about ONE user by his username</td>
+                    <td>/users/:Username</td>
+                    <td>GET</td>
+                    <td>Returns a JSON object with that username or error.</td>
                 </tr>
                 <tr>
-                    <td>Get data about a genre by name.</td>
-                    <td>/genres/:genre</td>
+                    <td>Get data about a movie by genre.</td>
+                    <td>/genres/:name</td>
                     <td>GET</td>
-                    <td>Returns a JSON data with movies of that genre.</td>
+                    <td>Returns a JSON object with that genre or error.</td>
                 </tr>
+                <tr>
+                    <td>Get data about a movie by director</td>
+                    <td>/directors/:directorName</td>
+                    <td>GET</td>
+                    <td>Returns a JSON object with that director or error.</td>
+                </tr> 
+
                 <tr>
                     <td>Get data about genre</td>
                     <td>/genres/:title</td>
                     <td>GET</td>
-                    <td>Returns JSON object with data by name/title.</td>
-                </tr>
-                <tr>
-                    <td>Get data about director</td>
-                    <td>/directors/:directorName</td>
-                    <td>GET</td>
-                    <td>Returns a JSON data.</td>
-                </tr>                                   
-                <tr>
-                    <td>Get ALL users</td>
-                    <td>/users</td>
-                    <td>GET</td>
-                    <td>Returns a JSON data with all users.</td>
+                    <td>Returns a JSON object with that title or error.</td>
                 </tr>
                 <tr>
                     <td>Add NEW user</td>
-                    <td>/users/:newUser</td>
+                    <td>/users</td>
                     <td>POST</td>
-                    <td>Adds new user to JSON object.</td>
+                    <td>Adds new user to JSON object 
+                        {Username,Password,Email,Birthday}.</td>
                 </tr>
                 <tr>
-                    <td>Allow users to update their user information</td>
+                    <td>Update one user info</td>
                     <td>/users/:Username</td>
                     <td>PUT</td>
-                    <td>Updates JSON object.</td>
+                    <td>Update existing info or error.</td>
                 </tr>
+               
                 <tr>
-                    <td>Delete the user</td>
+                    <td>Delete user</td>
                     <td>/users/:deleteUser</td>
                     <td>DELETE</td>
-                    <td>Confirms that the user was deleted.</td>
-                </tr>
-                <tr>
-                    <td>Add new movie to favorites</td>
-                    <td>/favorite/:movieName</td>
-                    <td>POST</td>
-                    <td>Confirms that the movie was added successfully.</td>
+                    <td>Confirms that was deleted or error.</td>
                 </tr>
                 <tr>
                     <td>Delete movie from favorites</td>
-                    <td>/favorite/:deleteMovie</td>
+                    <td>/users/:userName/movies/:title</td>
                     <td>DELETE</td>
-                    <td>Confirms which movie was removed successfully.</td>
+                    <td>Confirms the update or error.</td>
                 </tr>
             </table>
             <br>
