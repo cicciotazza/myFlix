@@ -2,8 +2,9 @@
   "dependencies": {
     "body": "^5.1.0",
     "body-parser": "^1.19.1",
-    "express": "^4.17.1",
-    "mongoose": "^6.1.4",
+    "express": "^4.17.2",
+    "mongodb": "^4.3.0",
+    "mongoose": "^6.1.5",
     "morgan": "^1.10.0",
     "parsr": "^0.0.1",
     "sequelize": "^6.12.5",

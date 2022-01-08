@@ -13,6 +13,12 @@ const Users = Models.User;
 const Genres = Models.Genre;
 const Directors = Models.Director;
 
+//link to MondoDB database
+mongoose.connect("mongodb://localhost:27017/myFlixDB",
+    {   useNewUrlParser: true, 
+        useUnifiedTopology: true 
+    });
+
 //Express framework and its middleware 
 app.use(bodyParser.json());  
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,12 +27,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(morgan("common"));
-
-//link to MondoDB database
-mongoose.connect("mongodb://localhost:27017/myFlixDB",
-    {   useNewUrlParser: true, 
-        useUnifiedTopology: true 
-    });
 
 //GET req, welcome message as res
 app.get("/", (req, res) =>{
@@ -94,7 +94,7 @@ app.get("/genres/:name", (req, res) => {
 });
 
 //GET data about movie-director by name
-app.get("/directors/:directorName", (req, res) => {
+app.get("/directors/:Name", (req, res) => {
     myFlixDB.findOne({"Director.Name": req.params.directorName})
     .then((movie)=>{
         res.json(movie.Director);
@@ -179,6 +179,7 @@ app.post("/users/:Username/movies/:MovieID", (req, res) => {
 
 //DELETE one user by name
 app.delete("/users/:deleteUser", (req, res) => {
+                  //Username
     Users.findOneAndRemove({ userName: req.params.deleteUser})
     .then((user) =>{
         if (!user) {
