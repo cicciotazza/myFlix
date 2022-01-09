@@ -6,7 +6,7 @@
     </head>
     <body>
         <h1>Documentation</h1>
-        <h2>Context</h2>
+        <h2>Content</h2>
         <p> Create a REST API for an application called “myFlix” that interacts with a database that stores data about different movies.
             In the next Achievement, you’ll build the client-side component of this same application using REACT.
             By the end of Achievement 3, you’ll have a complete web application (client-side and server-side) built
@@ -50,28 +50,42 @@
                     <td>Hello, welcome to myFlix App</td>
                 </tr>
                 <tr>
+                    <td>Home</td>
+                    <td>/secreturl</td>
+                    <td>GET</td>
+                    <td>This content is top SECRET</td>
+                </tr>
+                <tr>
                     <td>Get a list of ALL movies</td>
                     <td>/Movies</td>
                     <td>GET</td>
-                    <td>Returns an array of all JSON objects from mongoDB.</td>
+                    <td>Returns an array of all JSON objects from mongoDB,
+                        <br>including all the data of
+                        <br><code>{Title, Description, Year, Genre, Director, Imagepath, Featured}.</code></td>
                 </tr>
                 <tr>
                     <td>Get ALL users</td>
                     <td>/users</td>
                     <td>GET</td>
-                    <td>Returns JSON data with all users from mongoDB.</td>
+                    <td>Returns JSON data with all users from mongoDB
+                        <br>including all the data of
+                        <br><code>{Username, Password, Emailm, Birthday, FavoriteMovie}.</code></td>
                 </tr>
                 <tr>
                     <td>Get data about ONE movie by title</td>
                     <td>/movies/:title</td>
                     <td>GET</td>
-                    <td>Returns a JSON object with that title or error.</td>
+                    <td>Returns a JSON object with that title or error.
+                        <br>Example
+                        <br><code>{Title[...], Description[...], Year[...], Genre[...], Director[...], Imagepath[...], Featured[...]}</code></td>
                 </tr>
                  <tr>
                     <td>Get data about ONE user by his username</td>
                     <td>/users/:Username</td>
                     <td>GET</td>
-                    <td>Returns a JSON object with that username or error.</td>
+                    <td>Returns a JSON object with that username or error.
+                        <br>Example
+                        <br><code>{Username[...], Password[...], Email[...], Birthday[...], FavoriteMovie[...]}</code></td>
                 </tr>
                 <tr>
                     <td>Get data about a movie by genre.</td>
@@ -85,27 +99,22 @@
                     <td>GET</td>
                     <td>Returns a JSON object with that director or error.</td>
                 </tr> 
-
-                <tr>
-                    <td>Get data about genre</td>
-                    <td>/genres/:title</td>
-                    <td>GET</td>
-                    <td>Returns a JSON object with that title or error.</td>
-                </tr>
                 <tr>
                     <td>Add NEW user</td>
                     <td>/users</td>
                     <td>POST</td>
                     <td>Adds new user to JSON object 
-                        {Username,Password,Email,Birthday}.</td>
+                        <br>Example
+                        <br><code>{Username[...], Password[...], Email[...], Birthday[...], FavoriteMovie[...]}.</code></td>
                 </tr>
                 <tr>
                     <td>Update one user info</td>
                     <td>/users/:Username</td>
                     <td>PUT</td>
-                    <td>Update existing info or error.</td>
+                    <td>Update existing info or error.
+                        <br>Example
+                        <br><code>{Username[...], Password[...], Email[...], Birthday[...], FavoriteMovie[...]}.</code></td></td>
                 </tr>
-               
                 <tr>
                     <td>Delete user</td>
                     <td>/users/:deleteUser</td>

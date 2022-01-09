@@ -38,3 +38,13 @@ personal information, and create a list of their favorite movies
 
 **Task05**
 *Define the endpoints for your REST API*
+
+**Task06**
+*Relational Databases & SQL*
+
+**Task07**
+*Non-Relational Databases & MongoDB*
+
+**Task08**
+*The Business Logic Layer*
+
