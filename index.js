@@ -3,18 +3,16 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const uuid = require("uuid");
 const app = express();
-
+const { check, validationResult } = require("express-validator");
 //integration with a REST API, requiring Mongoose/Models and access to movies/users/genres/directos
 const mongoose = require("mongoose");
 const Models = require("./models.js");
 
 const Movies = Models.Movie;
 const Users = Models.User;
-const Genres = Models.Genre;
-const Directors = Models.Director;
 
-//link to MondoDB database
-mongoose.connect("mongodb://localhost:27017/myFlixDB",
+//link to MongoDB database
+mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",
     {   useNewUrlParser: true, 
         useUnifiedTopology: true 
     });
@@ -70,7 +68,7 @@ app.get("/movies/:title", (req, res) => {
 });
 
 //GET data about one user by Username 
-app.get("/users/:Username", (req, res) => {
+app.get("/users/:userName", (req, res) => {
     Users.findOne({ userName: req.params.Username})
     .then((user) => {
         res.json(user);
@@ -82,7 +80,7 @@ app.get("/users/:Username", (req, res) => {
 });
 
 //GET data about a movie-genre by name/title.
-app.get("/genres/:name", (req, res) => {
+app.get("/genres/:genreName", (req, res) => {
     Movies.findOne({"Genre.Name": req.params.genre})
     .then((movie)=>{
         res.json(movie.Genre)
@@ -106,7 +104,18 @@ app.get("/directors/:Name", (req, res) => {
 });
 
 //ADD a new user with JSON format
-app.post("/users", (req, res) => {
+/*[
+      check("Username", "Username is required").isLength({ min: 5 }),
+      check("Username","Username contains non alphanumeric characters - not allowed.").isAlphanumeric(),
+      check("Password", "Password is required").not().isEmpty(),
+      check("Email", "Email does not appear to be valid").isEmail(),
+    ],
+    let errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+    //object validation check for errors */
+app.post("/users",(req, res) => {
     Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
@@ -162,7 +171,8 @@ app.put("/users/:Username", (req, res) => {
 });
 
 //ADD one movie to a user's list of favorites
-app.post("/users/:Username/movies/:MovieID", (req, res) => {
+app.post("/users/:Username/favoriteMovies/:MovieID", (req, res) => {
+                          //movies/:MovieID
     Users.findOneAndUpdate({ Username: req.params.Username }, {
        $push: { FavoriteMovies: req.params.MovieID }
      },
@@ -195,8 +205,8 @@ app.delete("/users/:deleteUser", (req, res) => {
 });
 
 //DELETE movie from list of favorite 
-app.delete("/users/:userName/movies/:title", (req, res) => {
-        //"/users/:username/FavoriteMovies/:movieID",
+app.delete("/users/:userName/FavoriteMovies/:movieID", (req, res) => {
+        //"/users/:username/Movies/:Name",
     Users.findOneAndUpdate({userName: req.params.userName}, {
         $pull: {FavoriteMovies: req.params.title}
     },

@@ -20,7 +20,7 @@ let userSchema = mongoose.Schema ({
     Username: {type: String, required: true},
     Password: {type: String, required: true},
     Email: {type: String, required: true},
-    Birthday: Date,
+    Birthday: {Date},
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie"}]
 });
 
@@ -30,4 +30,4 @@ let User = mongoose.model("User", userSchema);
 //any titles passed through will come out on the other side as lowercase and pluralized
 
 module.exports.Movie = Movie;
-module.exports.USer = User;
+module.exports.User = User;
