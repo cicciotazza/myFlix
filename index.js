@@ -16,11 +16,9 @@ const Users = Models.User;
 const Genres = Models.Genre; 
 const Directors = Models.Director;
 
-//link to MongoDB database
-mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",
-    {   useNewUrlParser: true, 
-        useUnifiedTopology: true 
-    });
+//link to MongoDB local or online database
+//mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Express framework and its middleware 
 app.use(bodyParser.json());  
