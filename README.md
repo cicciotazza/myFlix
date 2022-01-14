@@ -48,8 +48,3 @@ personal information, and create a list of their favorite movies
 **Task08**
 *The Business Logic Layer*
 
-**Task09**
-*Authentication & Authorization*
-
-**Task10**
-*Data Security, Validation & Ethics*
