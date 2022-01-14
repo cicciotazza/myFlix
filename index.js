@@ -8,16 +8,17 @@ const app = express();
 const mongoose = require("mongoose");
 const Models = require("./models.js");
 
+//server side validation
+const { check, validationResult } = require("express-validator");
+
 const Movies = Models.Movie;
 const Users = Models.User;
 const Genres = Models.Genre; 
 const Directors = Models.Director;
 
-//link to MongoDB database
-mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",
-    {   useNewUrlParser: true, 
-        useUnifiedTopology: true 
-    });
+//Local MongoDB local <-------------> online database
+//mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",{ useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 //Express framework and its middleware 
 app.use(bodyParser.json());  
@@ -27,6 +28,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(express.json());
 app.use(morgan("common"));
+
+//Import CORS (Cross-Origin-Resource-Sharing)
+//by default the application allows requests from all origins
+const cors = require("cors");
+app.use(cors());
+
+//if you want only certain origins to be given access: list of allowed domains within the variable allowedOrigins
+/*
+app.use(cors());
+let allowedOrigins ["http://localhost:8080", "htpp://testsite.com"];
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      //If a specific origin isn’t found on the list of allowed origins
+      let message ="The CORS policy for this application doesn't allow access from origin " + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
+*/
 
 //Import "Auth.js" file
 let auth = require("./auth")(app);
@@ -116,7 +139,7 @@ passport.authenticate("jwt", { session: false }),
  (req, res) =>{
   Movies.findOne({"Director.Name": req.params.Name})
   .then((movie)=>{
-      res.json(movie.Director);
+    res.json(movie.Director);
   })
   .catch((err)=>{
       console.error(err);
@@ -124,32 +147,49 @@ passport.authenticate("jwt", { session: false }),
   });
 });
 
-    //ADD a new user with JSON format
-    app.post("/users", (req, res) =>{
-      Users.findOne({ Username: req.body.Username })
-        .then((user) =>{
-          if (user) {
-            return res.status(400).send(req.body.Username + "already exists");
-          } else {
-            Users.create({
-                Username: req.body.Username,
-                Password: req.body.Password,
-                Email: req.body.Email,
-                Birthday: req.body.Birthday
-              })
-              .then((user) =>{res.status(201).json(user); })
-              .catch((error) =>{
-                console.error(error);
-                res.status(500).send("Error: " + error);
-              })
-          }
-        })
-        .catch((error) =>{
-          console.error(error);
-          res.status(500).send("Error: " + error);
+//ADD a new user with JSON format
+app.post("/users",
+    //validation logic for the request
+    [  
+    check("Username", "Username is required").isLength({min: 4}),
+    check("Username", "Username contains non alphanumeric characters - not allowed.").isAlphanumeric(),
+    check("Password", "Password is required").not().isEmpty(),
+    check("Email", "Email does not appear to be valid").isEmail()
+    ],
+(req, res) => {
+  // check the validation object for errors
+  let errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }  
+  //hash any password when registering before storing it on the MongoDB db
+  let hashedPassword = Users.hashedPassword(req.body.Password);
+  Users.findOne({ Username: req.body.Username })
+//Search if a user with a requested username already exists
+    .then((user) =>{
+      if (user) {
+        //if user found, sens a response that it already exists
+          return res.status(400).send(req.body.Username + "already exists");
+        } else {
+          Users.create({
+                  Username: req.body.Username,
+                  Password: req.body.Password,
+                  Email: req.body.Email,
+                  Birthday: req.body.Birthday
+                      })
+                .then((user) =>{res.status(201).json(user); })
+                .catch((error) =>{
+                  console.error(error);
+                  res.status(500).send("Error: " + error);
+                });
+              }
+            })
+            .catch((error) =>{
+              console.error(error);
+              res.status(500).send("Error: " + error);
+            });
         });
-    });
-  /*    {
+  /*   {
   ID: Integer,
   Username: String,
   Password: String,
@@ -159,15 +199,22 @@ passport.authenticate("jwt", { session: false }),
 
 //UPDATE a user info, by username
 app.put("/users/:Username",
+ //validation logic for the request
+ [  
+  check("Username", "Username is required").isLength({min: 4}),
+  check("Username", "Username contains non alphanumeric characters - not allowed.").isAlphanumeric(),
+  check("Password", "Password is required").not().isEmpty(),
+  check("Email", "Email does not appear to be valid").isEmail()
+  ],
 passport.authenticate("jwt", { session: false }), 
  (req, res) =>{
   Users.findOneAndUpdate(
     { Username: req.params.Username }, 
     { $set:{
-      Username: req.body.username,
-      Password: req.body.password,
-      Email: req.body.email,
-      Birthday: req.body.birthday
+      Username: req.body.Username,
+      Password: req.body.Password,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday
     }
   },
   { new: true },
@@ -249,7 +296,8 @@ res.status(500).send("Error founded, fix it!");
 next();  
 });
 
-//Listens for requests, port 8080
-app.listen(8080, () =>{
-    console.log("This app is listening on port 8080.");
+//App listenerer on port...
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0",() => {
+  console.log("Listening on port " + port);
 });
