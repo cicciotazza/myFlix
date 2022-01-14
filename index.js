@@ -16,7 +16,7 @@ const Users = Models.User;
 const Genres = Models.Genre; 
 const Directors = Models.Director;
 
-//link to MongoDB local or online database
+//Local MongoDB local <-------------> online database
 //mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",{ useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connect( process.env.CONNECTION_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -30,10 +30,13 @@ app.use(express.json());
 app.use(morgan("common"));
 
 //Import CORS (Cross-Origin-Resource-Sharing)
+//by default the application allows requests from all origins
 const cors = require("cors");
 app.use(cors());
-//app.use(cors()); to substitute for an list of allowed domains within the variable allowedOrigins
+
+//if you want only certain origins to be given access: list of allowed domains within the variable allowedOrigins
 /*
+app.use(cors());
 let allowedOrigins ["http://localhost:8080", "htpp://testsite.com"];
 app.use(cors({
   origin: (origin, callback) => {
@@ -146,7 +149,7 @@ passport.authenticate("jwt", { session: false }),
 
 //ADD a new user with JSON format
 app.post("/users",
-       //validation logic for the request
+    //validation logic for the request
     [  
     check("Username", "Username is required").isLength({min: 4}),
     check("Username", "Username contains non alphanumeric characters - not allowed.").isAlphanumeric(),
@@ -196,6 +199,13 @@ app.post("/users",
 
 //UPDATE a user info, by username
 app.put("/users/:Username",
+ //validation logic for the request
+ [  
+  check("Username", "Username is required").isLength({min: 4}),
+  check("Username", "Username contains non alphanumeric characters - not allowed.").isAlphanumeric(),
+  check("Password", "Password is required").not().isEmpty(),
+  check("Email", "Email does not appear to be valid").isEmail()
+  ],
 passport.authenticate("jwt", { session: false }), 
  (req, res) =>{
   Users.findOneAndUpdate(
@@ -286,6 +296,7 @@ res.status(500).send("Error founded, fix it!");
 next();  
 });
 
+//App listenerer on port...
 const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0",() => {
   console.log("Listening on port " + port);
