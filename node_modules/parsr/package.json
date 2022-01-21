@@ -1,0 +1,25 @@
+{
+  "name": "parsr",
+  "version": "0.0.1",
+  "description": "Extracts data from strings",
+  "main": "parsr.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebralio/parsr.git"
+  },
+  "author": "Alex Scheel Meyer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebralio/parsr/issues"
+  },
+  "homepage": "https://github.com/cerebralio/parsr#readme",
+  "devDependencies": {
+    "chai": "3.5.0",
+    "eslint": "3.12.2",
+    "eslint-config-cerebral": "0.0.3",
+    "eslint-plugin-import": "2.2.0"
+  }
+}
