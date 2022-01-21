@@ -1,4 +1,5 @@
-const jwtSecret = "your_jwt_secret"; //sa,e key used for JWTStrategy
+const jwtSecret = "your_jwt_secret";
+//same key used for JWTStrategy
 
 const jwt = require("jsonwebtoken"),
     passport = require("passport");
@@ -7,30 +8,32 @@ require("./passport"); //local passport file
 
 let generateJWTToken = (user) => {
     return jwt.sign(user, jwtSecret, {
-        subject: user.Username, //username to encode in the JWT
+        subject: user.userName, //username to encode in the JWT
         expiresIn: "7d",        //token expires in 7 days
         algorithm: "HS256"      //algorithm used to sign or encode the values of the JWT
     });
 }
 
 //POST Login
+//the route endpoint "xxx/login" is the model declared in "/index.js
 module.exports = (router) => {
-    router.post("/login", (req, res) => {
-        passport.authenticate("local", { session: false}, 
-        (error, user, info) => {
-            if (error || !user) {
-                return res.status(400).json({
-                    message: "Something is not right",
-                    user: user
-                });
-            }
-            req.login(user, { session: false }, (error) => {
-                if (error) {
-                    res.send(error);
+    router.use(passport.initialize());
+    router.post("movies/login", (req, res) => {
+        passport.authenticate("local", { session: false },
+            (error, user, info) => {
+                if (error || !user) {
+                    return res.status(400).json({
+                        message: "Something is not right",
+                        user: user
+                    });
                 }
-                let.token = generateJWTToken(user.toJSON());
-                return res.json({ user, token});
-            });
-        })(req, res);
+                req.login(user, { session: false }, (error) => {
+                    if (error) {
+                        res.send(error);
+                    }
+                    let.token = generateJWTToken(user.toJSON());
+                    return res.json({ user, token });
+                });
+            })(req, res);
     });
 }
