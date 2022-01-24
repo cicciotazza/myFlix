@@ -49,7 +49,7 @@ app.use(cors({
 //Import "Auth.js" file and Passport module
 const passport = require("passport");
 require("./passport.js");
-let auth = require('./auth')(app);
+let auth = require('./auth.js')(app);
 
 //Home
 app.get("/",
@@ -155,9 +155,9 @@ app.post("/users",
   //or use .isLength({min: 5}) which means
   //minimum value of 5 characters are only allowed
   [
-    check('userName', 'Username is required').isLength({ min: 5 }),
-    check('userName', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('password', 'Password is required').not().isEmpty(),
+    check('userName', 'userName is required').isLength({ min: 3 }),
+    check('userName', 'userName contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'password is required').not().isEmpty(),
     check('email', 'Email does not appear to be valid').isEmail()
   ], (req, res) => {
     // check the validation object for errors
