@@ -2,15 +2,15 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
-
 //integration with a REST API, requiring Mongoose/Models and access to movies/users/genres/directos
 const mongoose = require("mongoose");
 const Models = require("./models.js");
-
+//express validator
+const { check, validationResult } = require('express-validator');
 //const myFlixDB = Models.Movie;
+
 const Movies = Models.Movie;
 const Users = Models.User;
-
 
 //Local MongoDB local <-------------> online database
 //mongoose.connect("mongodb://127.0.0.1:27017/myFlixDB",{ useNewUrlParser: true, useUnifiedTopology: true });
@@ -29,15 +29,27 @@ app.use(morgan("common"));
 const cors = require('cors');
 app.use(cors());
 
-//express validator
-const { check, validationResult } = require('express-validator');
-
+//if you want only certain origins to be given access: list of allowed domains
+/*
+app.use(cors());
+let allowedOrigins ["http://localhost:8080", "htpp://testsite.com"];
+app.use(cors({
+  origin: (origin, callback) => {
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      //If a specific origin isn’t found on the list of allowed origins
+      let message ="The CORS policy for this application doesn't allow access from origin " + origin;
+      return callback(new Error(message ), false);
+    }
+    return callback(null, true);
+  }
+}));
+*/
 
 //Import "Auth.js" file and Passport module
 const passport = require("passport");
 require("./passport.js");
 let auth = require('./auth')(app);
-
 
 //Home
 app.get("/",
@@ -48,22 +60,22 @@ app.get("/",
 //Documentation
 app.get("/documentation", (req, res) => {
   res.sendfile("/public/documentation.html", { root: __dirname })
-}),
+});
 
 
-  //GET all movies
-  app.get("/movies",
-    passport.authenticate("jwt", { session: false }),
-    (req, res) => {
-      Movies.find()
-        .then((movies) => {
-          res.status(200).json(movies);
-        })
-        .catch((err) => {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        });
-    });
+//GET all movies
+app.get("/movies",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Movies.find()
+      .then((movies) => {
+        res.status(200).json(movies);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  });
 
 //Get all users
 app.get("/users",
@@ -143,15 +155,13 @@ app.post("/users",
   //or use .isLength({min: 5}) which means
   //minimum value of 5 characters are only allowed
   [
-    check('Username', 'Username is required').isLength({ min: 5 }),
-    check('Username', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-    check('Password', 'Password is required').not().isEmpty(),
-    check('Email', 'Email does not appear to be valid').isEmail()
+    check('userName', 'Username is required').isLength({ min: 5 }),
+    check('userName', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'Password is required').not().isEmpty(),
+    check('email', 'Email does not appear to be valid').isEmail()
   ], (req, res) => {
-
     // check the validation object for errors
     let errors = validationResult(req);
-
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
@@ -181,6 +191,7 @@ app.post("/users",
   });
 
 //UPDATE existing user by username
+//let hashedPassword = Users.hashPassword(req.body.password);
 app.put("/users/:Username",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
@@ -189,6 +200,7 @@ app.put("/users/:Username",
       {
         $set: {
           userName: req.body.userName,
+          //password: hashedPassword,
           password: req.body.password,
           email: req.body.email,
           Birthday: req.body.birthday
