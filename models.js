@@ -25,13 +25,15 @@ let userSchema = mongoose.Schema({
     FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: "Movie" }]
 });
 
+//new addition for "bcrypt"
 userSchema.statics.hashPassword = (password) => {
-    return bcrypt.hashSync(password, 10);
+    return bcrypt.hashSync(password, 5);
 };
 
 userSchema.methods.validatePassword = function (password) {
-    return bcrypt.compareSync(password, this.Password);
-};
+    return bcrypt.compareSync(password, this.password);
+};                                      //changed line 33/34 to "this.password" lower case
+
 
 //create models that use the scemas defined (plurals and must be LOWER-CASE)
 let Movie = mongoose.model("Movie", movieSchema);

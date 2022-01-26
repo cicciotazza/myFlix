@@ -2,13 +2,13 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const app = express();
+const bcrypt = require("bcrypt");
+
 //integration with a REST API, requiring Mongoose/Models and access to movies/users/genres/directos
 const mongoose = require("mongoose");
 const Models = require("./models.js");
-//express validator
-const { check, validationResult } = require('express-validator');
-//const myFlixDB = Models.Movie;
 
+//const myFlixDB = Models.Movie;
 const Movies = Models.Movie;
 const Users = Models.User;
 
@@ -25,12 +25,15 @@ app.use(express.static("public"));
 app.use(express.json());
 app.use(morgan("common"));
 
+//Import "Auth.js" file and Passport module
+const passport = require("passport");
+require("./passport.js");
+let auth = require('./auth')(app);
+
 //import cors
 const cors = require('cors');
 app.use(cors());
-
-//if you want only certain origins to be given access: list of allowed domains
-/*
+/* if you want only certain origins to be given access: list of allowed domains
 app.use(cors());
 let allowedOrigins ["http://localhost:8080", "htpp://testsite.com"];
 app.use(cors({
@@ -43,13 +46,7 @@ app.use(cors({
     }
     return callback(null, true);
   }
-}));
-*/
-
-//Import "Auth.js" file and Passport module
-const passport = require("passport");
-require("./passport.js");
-let auth = require('./auth.js')(app);
+}));        */
 
 //Home
 app.get("/",
@@ -60,22 +57,21 @@ app.get("/",
 //Documentation
 app.get("/documentation", (req, res) => {
   res.sendfile("/public/documentation.html", { root: __dirname })
-});
+}),
 
-
-//GET all movies
-app.get("/movies",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Movies.find()
-      .then((movies) => {
-        res.status(200).json(movies);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send("Error: " + err);
-      });
-  });
+  //GET all movies
+  app.get("/movies",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      Movies.find()
+        .then((movies) => {
+          res.status(200).json(movies);
+        })
+        .catch((err) => {
+          console.error(err);
+          res.status(500).send("Error: " + err);
+        });
+    });
 
 //Get all users
 app.get("/users",
