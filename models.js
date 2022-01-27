@@ -30,6 +30,7 @@ userSchema.statics.hashPassword = (password) => {
     return bcrypt.hashSync(password, 5);
 };
 
+                                        //changed line 33/34 to "this.password" lower case
 userSchema.methods.validatePassword = function (password) {
     return bcrypt.compareSync(password, this.password);
 };                                      //changed line 33/34 to "this.password" lower case
