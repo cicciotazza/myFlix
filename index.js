@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("common"));
 
-let allowedOrigins = ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', '*'];
+let allowedOrigins = ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', 'https://cicciotazza-myflix.netlify.app/', '*'];
 
 //import cors
 const cors = require('cors');
