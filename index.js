@@ -23,7 +23,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("common"));
 
 // added localhost, Heroku, Netifly
-let allowedOrigins = ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', 'https://cicciotazza-myflix.netlify.app/', '*'];
+let allowedOrigins =
+  ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', 'https://cicciotazza-myflix.netlify.app/',
+    'http://localhost:4200/', 'https://cicciotazza.github.io/myFlix-Angular-client/', 'https://cicciotazza.github.io/myFlix-Angular-app/', '*'];
 
 //import cors
 const cors = require('cors');
