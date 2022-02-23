@@ -23,9 +23,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("common"));
 
 // added localhost, Heroku, Netifly
-let allowedOrigins =
-  ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', 'https://cicciotazza-myflix.netlify.app/',
-    'http://localhost:4200/', 'https://cicciotazza.github.io/myFlix-Angular-client/', 'https://cicciotazza.github.io/myFlix-Angular-app/', '*'];
+let allowedOrigins = ['http://localhost:8081', 'http://localhost:1234', 'https://herokumyflixdb.herokuapp.com/', 'https://cicciotazza-myflix.netlify.app/',
+  'http://localhost:4200/', 'https://cicciotazza.github.io/myFlix-Angular-client/', 'https://cicciotazza.github.io/myFlix-Angular-app/', '*'];
 
 //import cors
 const cors = require('cors');
@@ -265,20 +264,6 @@ app.delete("/users/:userName/movies/:title",
           res.json(updatedUser);
         }
       });
-  });
-
-//----------------FAV----------------------
-//Gets the list of user's favorite movies
-app.get('/users/FavouriteMovies/:userName',
-  passport.authenticate('jwt', { session: false }), (req, res) => {
-    Users.findOne({ userName: req.params.userName })
-      .then((user) => {
-        res.status(200).json(user.FavouriteMovies);
-      })
-      .catch((error) => {
-        console.error(error);
-        res.status(500).send('Error: ' + error);
-      })
   });
 
 app.get("/secreturl", (req, res) => {
