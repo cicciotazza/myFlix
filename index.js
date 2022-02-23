@@ -264,6 +264,19 @@ app.delete("/users/:userName/movies/:title",
       });
   });
 
+//----------------FAV----------------------
+//Gets the list of user's favorite movies
+app.get('/users/FavouriteMovies/:userName',
+  passport.authenticate('jwt', { session: false }), (req, res) => {
+    Users.findOne({ userName: req.params.userName })
+      .then((user) => {
+        res.status(200).json(user.FavouriteMovies);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      })
+  });
 
 app.get("/secreturl", (req, res) => {
   res.send("This content is top SECRET")
