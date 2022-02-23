@@ -29,7 +29,7 @@ let allowedOrigins =
 
 //import cors
 const cors = require('cors');
-app.use(cors({
+/* app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
@@ -39,7 +39,9 @@ app.use(cors({
     }
     return callback(null, true);
   }
-}));
+})); */
+
+app.use(cors());
 
 //Import "Auth.js" file and Passport module
 let auth = require('./auth')(app);
