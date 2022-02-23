@@ -28,7 +28,11 @@ let allowedOrigins = ['http://localhost:8081', 'http://localhost:1234', 'https:/
 
 //import cors
 const cors = require('cors');
-app.use(cors({
+
+// Either cut off this line bottom or the next code /* app.use...}))); */
+app.use(cors());
+
+/*app.use(cors({
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
@@ -38,10 +42,9 @@ app.use(cors({
     }
     return callback(null, true);
   }
-}));
+}));*/
 
-// Either cut off this line at the bottom or the code above
-//app.use(cors());
+
 
 //Import "Auth.js" file and Passport module
 let auth = require('./auth')(app);
