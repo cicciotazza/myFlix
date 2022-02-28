@@ -21,48 +21,48 @@ let Users = Models.User,
     JWTStrategy = passportJWT.Strategy,
     ExtractJWT = passportJWT.ExtractJwt;
 
-/** Configures and registers a local authentication strategy */   
+/** Configures and registers a local authentication strategy */
 passport.use(new LocalStrategy({
     usernameField: 'userName',
     passwordField: 'password'
-}, 
-  // Verify callback takes username, password and invokes done where credentials are valid
-  (username, password, callback) => {
-    console.log(username + '  ' + password);
-    Users.findOne({ userName: username }, (error, user) => {
-        if (error) {
-            console.log(error);
-            return callback(error);
-        }
+},
+    // Verify callback takes username, password and invokes done where credentials are valid
+    (username, password, callback) => {
+        console.log(username + '  ' + password);
+        Users.findOne({ userName: username }, (error, user) => {
+            if (error) {
+                console.log(error);
+                return callback(error);
+            }
 
-        if (!user) {
-            console.log('incorrect username');
-            return callback(null, false, { message: 'Incorrect username or password.' });
-        }
-        //added with 2.10 for password validation                                                
-        if (!user.validatePassword(password)) {
-            console.log('incorrect password');
-            return callback(null, false, { message: 'Incorrect password.' });
-        }
+            if (!user) {
+                console.log('incorrect username');
+                return callback(null, false, { message: 'Incorrect username or password.' });
+            }
+            //added with 2.10 for password validation                                                
+            if (!user.validatePassword(password)) {
+                console.log('incorrect password');
+                return callback(null, false, { message: 'Incorrect password.' });
+            }
 
-        console.log('finished');
-        return callback(null, user);
-    });
-}));
+            console.log('finished');
+            return callback(null, user);
+        });
+    }));
 
 /** Configures and registers a local authentication strategy */
 passport.use(new JWTStrategy({
     // Options object must contain the function to return the JWT and the secret to decode it
     jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
     secretOrKey: 'your_jwt_secret'
-}, 
-     //Verify callback takes decoded JWT payload and invokes done where userID valid
+},
+    //Verify callback takes decoded JWT payload and invokes done where userID valid
     (jwtPayload, callback) => {
-    return Users.findById(jwtPayload._id)
-        .then((user) => {
-            return callback(null, user);
-        })
-        .catch((error) => {
-            return callback(error)
-        });
-}));
+        return Users.findById(jwtPayload._id)
+            .then((user) => {
+                return callback(null, user);
+            })
+            .catch((error) => {
+                return callback(error)
+            });
+    }));

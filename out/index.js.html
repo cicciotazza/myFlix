@@ -41,7 +41,7 @@
  * @requires cors Used to control origins from which requests to the server can be made.
  * @requires express-validator Used to perform validation on data provided when creating or updating a user.
  */
- 
+
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -105,7 +105,7 @@ require("./passport.js");
  * @param {string} URL 
  * @param {requestCallback}
  * @returns {string} The welcome message.
- */ 
+ */
 app.get("/",
   (req, res) => {
     res.send("Hello, welcome to myFlix App.");
@@ -259,45 +259,45 @@ app.get("/directors/:Name",
  * @param {requestCallback}
  * @returns {Object} An object containing the new user record.
  */app.post("/users", [
-  // Validation logic here for request
-  //you can either use a chain of methods like .not().isEmpty()
-  //which means "opposite of isEmpty" in plain english "is not empty"
-  //or use .isLength({min: 5}) which means
-  //minimum value of 5 characters are only allowed
-  check('userName', 'Username is required').isLength({ min: 5 }),
-  check('userName', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
-  check('password', 'Password is required').not().isEmpty(),
-  check('email', 'Email does not appear to be valid').isEmail()
-], (req, res) => {
-  // check the validation object for errors
-  let errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-  let hashedPassword = Users.hashPassword(req.body.password);
-  Users.findOne({ userName: req.body.userName })
-    .then((user) => {
-      if (user) {
-        return res.status(400).send(req.body.userName + "already exists");
-      } else {
-        Users.create({
-          userName: req.body.userName,
-          password: hashedPassword,
-          email: req.body.email,
-          Birthday: req.body.Birthday
-        })
-          .then((user) => { res.status(201).json(user); })
-          .catch((error) => {
-            console.error(error);
-            res.status(500).send("Error: " + error);
+    // Validation logic here for request
+    //you can either use a chain of methods like .not().isEmpty()
+    //which means "opposite of isEmpty" in plain english "is not empty"
+    //or use .isLength({min: 5}) which means
+    //minimum value of 5 characters are only allowed
+    check('userName', 'Username is required').isLength({ min: 5 }),
+    check('userName', 'Username contains non alphanumeric characters - not allowed.').isAlphanumeric(),
+    check('password', 'Password is required').not().isEmpty(),
+    check('email', 'Email does not appear to be valid').isEmail()
+  ], (req, res) => {
+    // check the validation object for errors
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    let hashedPassword = Users.hashPassword(req.body.password);
+    Users.findOne({ userName: req.body.userName })
+      .then((user) => {
+        if (user) {
+          return res.status(400).send(req.body.userName + "already exists");
+        } else {
+          Users.create({
+            userName: req.body.userName,
+            password: hashedPassword,
+            email: req.body.email,
+            Birthday: req.body.Birthday
           })
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send("Error: " + error);
-    });
-});
+            .then((user) => { res.status(201).json(user); })
+            .catch((error) => {
+              console.error(error);
+              res.status(500).send("Error: " + error);
+            })
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send("Error: " + error);
+      });
+  });
 
 /**
  * PUT request to the /users/[Username] endpoint to update the user's details. This request requires 
@@ -346,22 +346,22 @@ app.put("/users/:Username",
  * @returns {Object} An array with the user's updated favourite movies. The mongoose populate method 
  * is used to replace the ID of each movie with the document from the movies collection.
  */app.post("/users/:userName/favoriteMovies/:MovieID",
-  passport.authenticate("jwt", { session: false }),
-  (req, res) => {
-    Users.findOneAndUpdate(
-      { userName: req.params.userName }, {
-      $push: { FavoriteMovies: req.params.MovieID }
-    },
-      { new: true }, // This line makes sure that the updated document is returned
-      (err, updatedUser) => {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error: " + err);
-        } else {
-          res.json(updatedUser);
-        }
-      });
-  });
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      Users.findOneAndUpdate(
+        { userName: req.params.userName }, {
+        $push: { FavoriteMovies: req.params.MovieID }
+      },
+        { new: true }, // This line makes sure that the updated document is returned
+        (err, updatedUser) => {
+          if (err) {
+            console.error(err);
+            res.status(500).send("Error: " + err);
+          } else {
+            res.json(updatedUser);
+          }
+        });
+    });
 
 /**
  * DELETE request to the /users/[Username] endpoint.
@@ -427,6 +427,32 @@ app.use((err, req, res, next) => {
   next();
 });
 
+/**
+ * PUT request to the /users/[Username]/[MovieID] endpoint.
+ * @method PUT 
+ * @param {string} URL
+ * @example /users/UserNr7/60a110a28e923350a5340b06
+ * @param {authenticationCallback} 
+ * @param {requestCallback}
+ * @returns {Object} An array with the user's updated favourite movies. The mongoose populate method 
+ * is used to replace the ID of each movie with the document from the movies collection.
+ */
+app.put('/users/:userName/:MovieID', passport.authenticate('jwt', { session: false }), (req, res) => {
+  Users.findOneAndUpdate(
+    { Username: req.params.userName },
+    { $push: { FavouriteMovies: req.params.MovieID } },
+    { new: true }
+  ).populate('FavouriteMovies')
+    .then((user) => {
+      res.status(200).json(user.FavouriteMovies);
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).send('Error: ' + error);
+    })
+});
+
+
 // Listens for requests, port 8080
 const port = process.env.PORT || 8080;
 app.listen(port, "0.0.0.0", () => {
@@ -447,7 +473,7 @@ app.listen(port, "0.0.0.0", () => {
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Mon Feb 28 2022 23:55:13 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.10</a> on Tue Mar 01 2022 00:19:06 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

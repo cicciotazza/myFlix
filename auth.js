@@ -10,8 +10,8 @@ const jwtSecret = "your_jwt_secret";
 
 
 const jwt = require("jsonwebtoken"),
-// Run passport file where strategies are implemented
-      passport = require("passport");
+    // Run passport file where strategies are implemented
+    passport = require("passport");
 const bcrypt = require("bcrypt");
 
 require("./passport"); //local passport file
