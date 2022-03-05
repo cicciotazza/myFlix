@@ -400,7 +400,7 @@ app.get('/users/favorites/:userName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ userName: req.params.userName })
       .then((user) => {
-        res.status(200).json(user.FavouriteMovies);
+        res.status(200).json(user.FavoriteMovies);
       })
       .catch((error) => {
         console.error(error);
@@ -408,7 +408,7 @@ app.get('/users/favorites/:userName',
       })
   });
 
-  /**
+/**
 * Alternative GET REQUEST TO FAVORITE as /users/favoriteMovies/:userName endpoint.
 * @method GET 
 * @param {string} URL
@@ -417,7 +417,7 @@ app.get('/users/favorites/:userName',
 * @param {requestCallback}
 * @returns {Object} An array of the IDs of the user's favourite movies.
 */
-  app.get('/users/favoriteMovies/:userName',
+app.get('/users/favoriteMovies/:userName',
   passport.authenticate('jwt', { session: false }), (req, res) => {
     Users.findOne({ userName: req.params.userName })
       .then((user) => {
