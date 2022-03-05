@@ -6,7 +6,7 @@ These are documented in detail here: [myFlix API endpoints](https://herokumyflix
 
 - A movie app using React is available [here](https://cicciotazza-myflix.netlify.app/).
 
-- A movie appusing Angular is available [here](https://cicciotazza.github.io/myFlix-Angular-client/).
+- A movie app using Angular is available [here](https://cicciotazza.github.io/myFlix-Angular-client/).
 
 - myFlix was built using Node.js and the Express framework and is hosted on [Heroku](https://www.heroku.com/). The database is hosted on [MongoDB Atlas](https://www.mongodb.com/atlas/database). 
 

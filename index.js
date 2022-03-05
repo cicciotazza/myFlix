@@ -312,7 +312,7 @@ app.put("/users/:Username",
  * PUT request to the /users/[Username]/[MovieID] endpoint.
  * @method PUT 
  * @param {string} URL
- * @example /users/myusername/60a110a28e923350a5340b06
+ * @example /users/UserNr7/60a110a28e923350a5340b06
  * @param {authenticationCallback} 
  * @param {requestCallback}
  * @returns {Object} An array with the user's updated favourite movies. The mongoose populate method 
@@ -385,6 +385,48 @@ app.delete("/users/:userName/movies/:title",
           res.json(updatedUser);
         }
       });
+  });
+
+/**
+* GET request to the /users/favourites/[Username] endpoint.
+* @method GET 
+* @param {string} URL
+* @example /users/favourites/UserNr11
+* @param {authenticationCallback} 
+* @param {requestCallback}
+* @returns {Object} An array of the IDs of the user's favourite movies.
+*/
+app.get('/users/favorites/:userName',
+  passport.authenticate('jwt', { session: false }), (req, res) => {
+    Users.findOne({ userName: req.params.userName })
+      .then((user) => {
+        res.status(200).json(user.FavouriteMovies);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      })
+  });
+
+  /**
+* Alternative GET REQUEST TO FAVORITE as /users/favoriteMovies/:userName endpoint.
+* @method GET 
+* @param {string} URL
+* @example /users/favoriteMovies/UserNr12
+* @param {authenticationCallback} 
+* @param {requestCallback}
+* @returns {Object} An array of the IDs of the user's favourite movies.
+*/
+  app.get('/users/favoriteMovies/:userName',
+  passport.authenticate('jwt', { session: false }), (req, res) => {
+    Users.findOne({ userName: req.params.userName })
+      .then((user) => {
+        res.status(200).json(user.FavoriteMovies);
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send('Error: ' + error);
+      })
   });
 
 // Testind endpoint
